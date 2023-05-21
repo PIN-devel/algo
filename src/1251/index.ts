@@ -18,7 +18,7 @@ const f1251 = () => {
   // const inputPath = '/dev/stdin';
   const inputTxt = readFileSync(inputPath).toString().trim();
 
-  const revStr = (str: string) => str.split('').reverse().join('').trim();
+  const revStr = (str: string) => str.split('').reverse().join('');
 
   const suspects = [];
   for (let i = 1; i < inputTxt.length - 1; i++) {
@@ -26,8 +26,8 @@ const f1251 = () => {
     for (let j = i + 1; j < inputTxt.length; j++) {
       const char2 = inputTxt.slice(i, j);
       const char3 = inputTxt.slice(j);
-      const set = revStr(char1) + revStr(char2) + revStr(char3);
-      suspects.push(set);
+      const charSet = revStr(char1) + revStr(char2) + revStr(char3);
+      suspects.push(charSet);
     }
   }
   console.log(suspects.sort()[0]);
