@@ -18,8 +18,7 @@ const f1251 = () => {
   // const inputPath = '/dev/stdin';
   const inputTxt = readFileSync(inputPath).toString().trim();
 
-  const revStr = (str: string): string =>
-    str.split('').reverse().join('').trim();
+  const revStr = (str: string) => str.split('').reverse().join('').trim();
 
   const suspects = [];
   for (let i = 1; i < inputTxt.length - 1; i++) {
