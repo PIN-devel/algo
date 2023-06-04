@@ -7,11 +7,11 @@ const [N] = inputList[0].split(' ').map(Number);
 
 class RangeSumTree {
   len: number;
-  sumList: bigint[];
+  sumTree: bigint[];
 
   constructor(dataList: bigint[]) {
     this.len = dataList.length;
-    this.sumList = [...Array(4 * this.len)];
+    this.sumTree = [...Array(4 * this.len)];
     this.init(dataList);
   }
 
@@ -21,12 +21,12 @@ class RangeSumTree {
     str = 0,
     end = this.len - 1
   ): bigint => {
-    if (str === end) return (this.sumList[node] = dataList[str]);
+    if (str === end) return (this.sumTree[node] = dataList[str]);
 
-    const mid = Math.floor((str + end) / 2);
+    const mid = ~~((str + end) / 2);
     const left = this.init(dataList, node * 2 + 1, str, mid);
     const right = this.init(dataList, node * 2 + 2, mid + 1, end);
-    return (this.sumList[node] = left + right);
+    return (this.sumTree[node] = left + right);
   };
 
   getSum = (
@@ -38,9 +38,9 @@ class RangeSumTree {
   ): bigint => {
     if (from > end || to < str) return BigInt(0);
 
-    if (from <= str && to >= end) return this.sumList[node];
+    if (from <= str && to >= end) return this.sumTree[node];
 
-    const mid = Math.floor((str + end) / 2);
+    const mid = ~~((str + end) / 2);
     const left = this.getSum(from, to, node * 2 + 1, str, mid);
     const right = this.getSum(from, to, node * 2 + 2, mid + 1, end);
     return left + right;
@@ -53,14 +53,14 @@ class RangeSumTree {
     str = 0,
     end = this.len - 1
   ): bigint => {
-    if (idx < str || idx > end) return this.sumList[node];
+    if (idx < str || idx > end) return this.sumTree[node];
 
-    if (str === end) return (this.sumList[node] = data);
+    if (str === end) return (this.sumTree[node] = data);
 
-    const mid = Math.floor((str + end) / 2);
+    const mid = ~~((str + end) / 2);
     const left = this.update(idx, data, node * 2 + 1, str, mid);
     const right = this.update(idx, data, node * 2 + 2, mid + 1, end);
-    return (this.sumList[node] = left + right);
+    return (this.sumTree[node] = left + right);
   };
 }
 const rst = new RangeSumTree(inputList.slice(1, N + 1).map(BigInt));
