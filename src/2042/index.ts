@@ -5,11 +5,12 @@ const inputPath = 'src/2042/input.txt';
 const inputList = readFileSync(inputPath).toString().split('\n');
 const N = Number(inputList[0].split(' ')[0]);
 
-const temp: bigint[] = Array.from({length: N + 1}, () => BigInt(0));
-const tree: bigint[] = Array.from({length: N + 1}, () => BigInt(0));
+const B0 = BigInt(0);
+const temp: bigint[] = Array.from({length: N + 1}, () => B0);
+const tree: bigint[] = Array.from({length: N + 1}, () => B0);
 
 function sum(i: number) {
-  let ret = BigInt(0);
+  let ret = B0;
   while (i > 0) {
     ret += tree[i];
     i -= i & -i;
@@ -39,11 +40,10 @@ for (let i = N + 1; i < inputList.length; i++) {
     temp[idx] = data;
     update(idx, dif);
   } else if (a === '2') {
-    const idx1 = Number(b) - 1;
+    const idx1 = Number(b);
     const idx2 = Number(c);
-    // console.log((sum(idx2) - sum(idx1)).toString());
-    ans.push(sum(idx2) - sum(idx1), '\n');
+    ans.push(sum(idx2) - sum(idx1 - 1));
   }
 }
 
-console.log(ans.join(''));
+console.log(ans.join('\n'));
