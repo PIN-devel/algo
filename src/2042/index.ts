@@ -28,19 +28,22 @@ for (let i = 1; i <= N; i++) {
   update(i, (temp[i] = BigInt(inputList[i])));
 }
 
+const ans = [];
 for (let i = N + 1; i < inputList.length; i++) {
-  const cmd = inputList[i].split(' ');
-  const a = Number(cmd[0]);
+  const [a, b, c] = inputList[i].split(' ');
 
-  if (a === 1) {
-    const b = Number(cmd[1]);
-    const c = BigInt(cmd[2]);
-    const dif = c - temp[b];
-    temp[b] = c;
-    update(b, dif);
-  } else if (a === 2) {
-    const b = Number(cmd[1]);
-    const c = Number(cmd[2]);
-    console.log((sum(c) - sum(b - 1)).toString());
+  if (a === '1') {
+    const idx = Number(b);
+    const data = BigInt(c);
+    const dif = data - temp[idx];
+    temp[idx] = data;
+    update(idx, dif);
+  } else if (a === '2') {
+    const idx1 = Number(b) - 1;
+    const idx2 = Number(c);
+    // console.log((sum(idx2) - sum(idx1)).toString());
+    ans.push(sum(idx2) - sum(idx1), '\n');
   }
 }
+
+console.log(ans.join(''));
