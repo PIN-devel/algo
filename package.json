@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "algo",
   "version": "0.0.0",
   "description": "",
   "main": "build/src/index.js",
@@ -27,5 +27,8 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "ts-node": "^10.9.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
