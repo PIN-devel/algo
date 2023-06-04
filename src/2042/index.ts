@@ -5,72 +5,41 @@ const inputPath = 'src/2042/input.txt';
 const inputList = readFileSync(inputPath).toString().split('\n');
 const [N] = inputList[0].split(' ').map(Number);
 
-class RangeSumTree {
-  len: number;
-  sumTree: bigint[];
-
-  constructor(dataList: bigint[]) {
-    this.len = dataList.length;
-    this.sumTree = [...Array(4 * this.len)];
-    this.init(dataList);
+function sum(tree: bigint[], i: number) {
+  let ret = BigInt(0);
+  while (i > 0) {
+    ret += tree[i];
+    i -= i & -i;
   }
-
-  private init = (
-    dataList: bigint[],
-    node = 0,
-    str = 0,
-    end = this.len - 1
-  ): bigint => {
-    if (str === end) return (this.sumTree[node] = dataList[str]);
-
-    const mid = ~~((str + end) / 2);
-    const left = this.init(dataList, node * 2 + 1, str, mid);
-    const right = this.init(dataList, node * 2 + 2, mid + 1, end);
-    return (this.sumTree[node] = left + right);
-  };
-
-  getSum = (
-    from: number,
-    to: number,
-    node = 0,
-    str = 0,
-    end = this.len - 1
-  ): bigint => {
-    if (from > end || to < str) return BigInt(0);
-
-    if (from <= str && to >= end) return this.sumTree[node];
-
-    const mid = ~~((str + end) / 2);
-    const left = this.getSum(from, to, node * 2 + 1, str, mid);
-    const right = this.getSum(from, to, node * 2 + 2, mid + 1, end);
-    return left + right;
-  };
-
-  update = (
-    idx: number,
-    data: bigint,
-    node = 0,
-    str = 0,
-    end = this.len - 1
-  ): bigint => {
-    if (idx < str || idx > end) return this.sumTree[node];
-
-    if (str === end) return (this.sumTree[node] = data);
-
-    const mid = ~~((str + end) / 2);
-    const left = this.update(idx, data, node * 2 + 1, str, mid);
-    const right = this.update(idx, data, node * 2 + 2, mid + 1, end);
-    return (this.sumTree[node] = left + right);
-  };
+  return ret;
 }
-const rst = new RangeSumTree(inputList.slice(1, N + 1).map(BigInt));
+
+function update(tree: bigint[], i: number, dif: bigint) {
+  while (i < tree.length) {
+    tree[i] += dif;
+    i += i & -i;
+  }
+}
+
+const numList: bigint[] = Array.from({length: N + 1}, () => BigInt(0));
+const tree: bigint[] = Array.from({length: N + 1}, () => BigInt(0));
+for (let i = 1; i <= N; i++) {
+  numList[i] = BigInt(inputList[i]);
+  update(tree, i, numList[i]);
+}
 
 for (let i = N + 1; i < inputList.length; i++) {
-  const [a, b, c] = inputList[i].split(' ').map(Number);
+  const cmd = inputList[i].split(' ');
+  const a = Number(cmd[0]);
 
   if (a === 1) {
-    rst.update(b - 1, BigInt(c));
-  } else if (a === 2) {
-    console.log(rst.getSum(b - 1, c - 1).toString());
+    const b = Number(cmd[1]);
+    const c = BigInt(cmd[2]);
+    const dif = c - numList[b];
+    update(tree, b, dif);
+  } else {
+    const b = Number(cmd[1]);
+    const c = Number(cmd[2]);
+    console.log((sum(tree, c) - sum(tree, b - 1)).toString());
   }
 }
