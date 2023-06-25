@@ -14,7 +14,7 @@ const find = (i: number, sum: number) => {
     ans++;
     return;
   }
-  for (let idx = 0; idx < exercises.length; idx++) {
+  for (let idx = 0; idx < N; idx++) {
     const exercise = exercises[idx];
     const nextSum = sum + exercise - K;
     if (!exercised[idx] && nextSum >= 0) {
